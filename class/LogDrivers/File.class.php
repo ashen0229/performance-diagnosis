@@ -9,13 +9,14 @@ class File extends driver {
     {
         if(empty($config['LogFilePath'])){
             throw new Exception('未指定存放日志目录',500);
-        }elseif(!is_dir($config['LogFilePath']) && !mkdir($config['LogFilePath'],0644,true)){
+        }elseif(!is_dir($config['LogFilePath']) && !mkdir($config['LogFilePath'],0666,true)){
             throw new Exception('存放日志目录不正确',500);
         }else{
             $this->path=$config['LogFilePath'];
         }
         parent::__construct($config);
     }
+
     public function start(){
         $this->trace_file=$this->path.date("YmdHis").'-'.$this->trace_id;
         $explode_str='-';

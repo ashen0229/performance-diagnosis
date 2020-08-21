@@ -58,7 +58,7 @@ class performanceDiagnosis
     public function __construct($config)
     {
         $this->_LogType = empty($config['LogType']) ? 'OUTPUT' : $config['LogType'];
-        if (!file_exists(PERFORMANCE_DIAGNOSIS_LOGDRIVER_PATH . ucfirst($this->_LogType) . '.class.php')) {
+        if (!file_exists(PERFORMANCE_DIAGNOSIS_LOGDRIVER_PATH . ucfirst(strtolower($this->_LogType)) . '.class.php')) {
             throw new Exception('未知的日志记录类型[' . $this->_LogType . ']', 500);
         }
         $driverClass = ucfirst(strtolower($this->_LogType));
@@ -66,7 +66,7 @@ class performanceDiagnosis
 
         $this->_LogDriver = new $driverClass($config);
         $this->_LogDriver->setTraceId(TRACE_ID);
-        $this->_LogDriver->start();
+
         $this->_DoLogMemoryConsuming = intval(empty($config['DoLogMemoryConsuming']) ? 0 : $config['DoLogMemoryConsuming']);
         $this->_DoLogTimeConsuming = intval(empty($config['DoLogTimeConsuming']) ? 0 : $config['DoLogTimeConsuming']);
 
@@ -74,6 +74,7 @@ class performanceDiagnosis
         if (!performanceDiagnosis::$register_status && !empty($config['enable'])) {
             performanceDiagnosis::$register_status = true;
             $this->_INIT_TIME=microtime();
+            $this->_LogDriver->start();
             register_tick_function(array(&$this, 'log'));
             register_shutdown_function(array(&$this, 'finished'));
         }
@@ -88,7 +89,6 @@ class performanceDiagnosis
         $totalUsedTime = bcsub($endTime[1] . '.' . ($endTime[0] * $mul_base), $startTime[1] . '.' . ($startTime[0] * $mul_base), 6);
         $maxConsumeMemory=memory_get_peak_usage();
         $maxRealUsageMemory=memory_get_peak_usage(true);
-        $backtrace = debug_backtrace();
         $this->_LogDriver->finished($this->_CMD_COUNT,$totalUsedTime,$maxConsumeMemory,$maxRealUsageMemory);
 
     }
@@ -97,7 +97,6 @@ class performanceDiagnosis
     {
         $this->_CMD_COUNT++;
         $backtrace = debug_backtrace();
-//        print_r($backtrace);
         $mul_base=1000000;
         $currentMemory = memory_get_usage(true);
         $currentTime = explode(" ",microtime());
