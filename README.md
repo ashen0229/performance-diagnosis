@@ -2,13 +2,12 @@
 ## performance diagnosis for your PHP code
 
 **注意**
->不要在生产环境长期打开
->不要在生产环境长期打开
->不要在生产环境长期打开
+>不要在生产环境长期打开<br />不要在生产环境长期打开<br />不要在生产环境长期打开
 
 
 **使用**
->引入class目录performanceDiagnosis.class.php
+>引入class目录下的 `performanceDiagnosis.class.php`
+
 ```
 <?php
 $config=array(
@@ -28,13 +27,13 @@ require __DIR__.DIRECTORY_SEPARATOR.'../class/performanceDiagnosis.class.php';
 performanceDiagnosis::init($config);
 
 ```
+
 >在要诊断的PHP文件合适位置添加 `declare(ticks=1);`
 
-好了.完事,记得配置的enable设为true
+好了.完事,记得配置的`enable`设为`true`
 
 **运行**
->正常访问你的WEB或CLI,
->按照你的日志记录形式,OUTPUT会直接输出,FILE则会写进文件,每一次执行都会有一个文件.
+>正常访问你的WEB或CLI,<br />按照你的日志记录形式,OUTPUT会直接输出,FILE则会写进文件,每一次执行都会有一个文件.
 
 
 
@@ -43,7 +42,4 @@ performanceDiagnosis::init($config);
 
 
 **最后**
->该工具除了监控每一行的运行时间.更多时候本可以拿来做程序运行的追踪.特别是大型系统,相信你懂的
->日志格式可以自行调整,都是最基础的PHP语句.
->最后只能祝你玩得愉快了.
-
+>该工具除了监控每一行的运行时间.更多时候本可以拿来做程序运行的追踪.特别是大型系统,相信你懂的<br />日志格式可以自行调整,都是最基础的PHP语句.<br />最后只能祝你玩得愉快了.
