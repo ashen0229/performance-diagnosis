@@ -25,6 +25,7 @@ for($i=0;$i<5;$i++){
 include __DIR__.DIRECTORY_SEPARATOR.'b.php';
 include __DIR__.DIRECTORY_SEPARATOR.'c.php';
 include __DIR__.DIRECTORY_SEPARATOR.'d.php';
+b::b2('test');
 $b=new b();
 $b->b1('haha',$a);
 

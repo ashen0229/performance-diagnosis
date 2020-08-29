@@ -34,19 +34,40 @@ class File extends driver {
         $arr[]=$usedTime;
         $arr[]=$this->memoryFormat($currentMemory);
         $arr[]=$this->memoryFormat($usedMemory);
-        $arr[]=$backtrace[0]['file'].':'.$backtrace[0]['line'];
+
+
+            $l=count($backtrace)-1;
+            $step=array();
+            $tmp=array();
+            $called_class='';
+            $called_func='';
+            for($inx=$l;$inx>=0;$inx--){
+
+                $tmp['file']=$backtrace[$inx]['file'];
+                $tmp['line']=$backtrace[$inx]['line'];
+                $tmp['class']=$called_class;
+                $tmp['func']=$called_func;
+                $called_class=!empty($backtrace[$inx]['class'])?$backtrace[$inx]['class']:"";
+                $called_func=empty($backtrace[$inx]['function'])?'':$backtrace[$inx]['function'];
+                $step[]=$tmp;
+                $tmp=array();
+            }
+            $step=array_reverse($step);
+            $arr[]=json_encode($step,JSON_UNESCAPED_UNICODE);
+
         file_put_contents($this->trace_file,implode($this->delimiter,$arr)."\n",FILE_APPEND);
     }
 
 
     public function finished($rows,$totalUsedTime,$maxConsumeMemory,$maxRealUsageMemory){
         $arr=array();
+        $arr[]='summary';
         $arr[]=$rows.' rows has run';
         $arr[]=$totalUsedTime.' second used';
         $arr[]=$this->memoryFormat($maxConsumeMemory).' used';
         $arr[]=$this->memoryFormat($maxRealUsageMemory).' real used';
 
-        file_put_contents ($this->trace_file,'summary: '.implode("; ",$arr).PHP_EOL,FILE_APPEND);
+        file_put_contents ($this->trace_file,implode($this->delimiter,$arr).PHP_EOL,FILE_APPEND);
     }
 
 }

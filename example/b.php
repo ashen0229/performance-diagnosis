@@ -11,4 +11,10 @@ class b{
         $c->c1();
         sleep(1);
     }
+
+    public static function b2($msg){
+        for($i=0;$i<10;$i++){
+            echo $msg;
+        }
+    }
 }

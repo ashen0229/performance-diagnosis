@@ -1,8 +1,4 @@
 <?php
-
-
-
-
 define('PERFORMANCE_DIAGNOSIS_PATH', __DIR__ . DIRECTORY_SEPARATOR);
 define('PERFORMANCE_DIAGNOSIS_LOGDRIVER_PATH', __DIR__ . DIRECTORY_SEPARATOR . 'LogDrivers' . DIRECTORY_SEPARATOR);
 define('PERFORMANCE_DIAGNOSIS_LANG_PATH', __DIR__ . DIRECTORY_SEPARATOR . 'Lang' . DIRECTORY_SEPARATOR);
@@ -109,9 +105,9 @@ class performanceDiagnosis
         }
         $startTime=explode(' ',$startTime);
 
-        $usedTime = bcsub($currentTime[1] . '.' . ($currentTime[0] * $mul_base), $startTime[1] . '.' . ($startTime[0] * $mul_base), 6);
+        $usedTime = bcsub($currentTime[1] . '.' . floor($currentTime[0] * $mul_base), $startTime[1] . '.' . floor($startTime[0] * $mul_base), 6);
 
-        $usedMemory = bcsub($currentMemory , $lastMemoryUsed);
+        $usedMemory = bcsub($currentMemory , $lastMemoryUsed,6);
         if (!$this->_DoLogMemoryConsuming || !$this->_DoLogTimeConsuming || $usedMemory >= $this->_DoLogMemoryConsuming || bcmul($usedTime, $mul_base) >= $this->_DoLogTimeConsuming) {
             $this->_LogDriver->log($usedTime,$currentMemory, $usedMemory, $backtrace);
         }
